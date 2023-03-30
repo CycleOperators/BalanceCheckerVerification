@@ -1,0 +1,21 @@
+{
+  "canisters": {
+    "blackhole": {
+      "main": "blackhole.mo",
+      "type": "motoko"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": "vessel sources"
+    }
+  },
+  "dfx": "0.13.1",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8089"
+    }
+  },
+  "version": 1
+}

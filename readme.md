@@ -1,29 +1,47 @@
 ## Introduction
-* This repository contains the [source code](blackhole.mo) for canister `5vdms-kaaaa-aaaap-aa3uq-cai`, the CycleOps balance checker canister
-* It contains scripts allowing a user to verify that canister `5vdms-kaaaa-aaaap-aa3uq-cai` is:
-  * blackholed, with 0 controllers
-  * running the same wasm binary generated from ([./blackhole.mo](blackhole.mo))
+
+- This repository contains the [source code](blackhole.mo) for canister `5vdms-kaaaa-aaaap-aa3uq-cai`, the CycleOps balance checker canister
+- It contains scripts allowing a user to verify that canister `5vdms-kaaaa-aaaap-aa3uq-cai` is:
+  - blackholed, with 0 controllers
+  - running the same wasm binary generated from ([./blackhole.mo](blackhole.mo))
 
 <br/>
 
 # Verification of the Blackholed Balance Checker canister
+
+## Easy Mode: Use a GH Action
+
+This will only take a few clicks!
+
+1. Fork this repository.
+2. Navigate to the actions tab of your new repo.
+3. Select the "Verify Black Hole Canister" action on the left.
+4. Dispatch the action.
+
+You can view the output of this action to confirm that 1) the canister has no controllers, 2) the mainnet wasm matches the contents of this repository. The final step to be 100% confident that this canister can do no harm is to audit the source code of this repo.
+
+## Alternative: Verify on your local machine
+
+_NOTE: Currently, this method is only supported for macOS, as the wasm hash generated will vary depending on operating system._
 
 To verify the CycleOps balance checker canister's black hole status from your local machine:
 
 1. Clone this repository
 2. Install version 0.13.1 of dfx (the version listed in the `dfx.json` file) with `DFX_VERSION=0.13.1 sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"`. [dfx](https://internetcomputer.org/docs/current/references/cli-reference/dfx-parent/) is the DFINITY command-line execution environment for creating, deploying, and managing the dapps you develop for the IC.
 3. Install vessel from (https://github.com/dfinity/vessel). Vessel is used to fix the version of the [motoko-base](https://github.com/dfinity/motoko-base) library used in the project to 0.8.4.
-3. The following command:
+4. The following command:
 
    a. Spins up a local dfx instance and deploys a copy of the CycleOps balance checker canister from the code in `blackhole.mo` in this repository.
 
    b. It then compares the wasm hash of that module against the hash of the wasm module stored in `5vdms-kaaaa-aaaap-aa3uq-cai`, the canister id of the CycleOps balance checker canister running on main net.
-   
+
    c. It also verifies that `5vdms-kaaaa-aaaap-aa3uq-cai` has no controllers.
+
    ```sh
-   npm run verify-blackhole 
+   npm run verify-blackhole
    ```
-4. You should see the following in the local logs:
+
+5. You should see the following in the local logs:
 
    ![successful action logs](./assets/local-log.png)
 
@@ -68,7 +86,6 @@ We provide users with a methodology to perform these validations independently, 
 <br/>
 
 # Disclaimers
-* This repository does not contain a license, meaninig reuse is only on permitted on per-use case basis. Please contact the CycleOps team if you would like to use this code in your application.
-* This software is provided "as is", without warranty of any kind. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software
 
-
+- This repository does not contain a license, meaninig reuse is only on permitted on per-use case basis. Please contact the CycleOps team if you would like to use this code in your application.
+- This software is provided "as is", without warranty of any kind. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software

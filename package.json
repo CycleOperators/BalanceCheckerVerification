@@ -4,7 +4,7 @@
   "description": "Demonstrates methodology for verifying black hole status and source code",
   "scripts": {
     "verify-blackhole": "npm ci && npm run setup && npm run verify",
-    "setup": "dfx stop && dfx start --clean --background && dfx deploy && npm run remove-controllers-local",
+    "setup": "npx ts-node ./os && dfx stop && dfx start --clean --background && dfx deploy && npm run remove-controllers-local",
     "remove-controllers-local": "dfx canister update-settings blackhole --remove-controller $(dfx identity get-wallet) && dfx canister update-settings blackhole --remove-controller $(dfx identity get-principal)",
     "declarations": "npx ts-node ./tasks/declarations",
     "pretty": "npx prettier --write \"**/*.ts(x)?\"",

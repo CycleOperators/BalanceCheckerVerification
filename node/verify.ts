@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import { execSync } from "child_process";
+import { verifyOS } from './os';
 
 /**
  * Retrieve black hole canister ID on mainnet.
@@ -42,6 +43,7 @@ function retrieveControllersAndModuleHash(
  * Verifies the status of the mainnet black hole canister in this repository.
  */
 async function run() {
+  verifyOS();
   const canisterLocal = await blackholeCanisterIdLocal();
   const canisterMainnet = await blackholeMainnetCanisterId();
   console.log(`Verifiying canister ${await blackholeMainnetCanisterId()}...`);

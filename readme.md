@@ -22,7 +22,7 @@ You can view the output of this action to confirm that 1) the canister has no co
 
 ## Alternative: Verify on your local machine
 
-_NOTE: wasm hash will vary depending on operating system. You must use macos to verify the wasm hash._
+_NOTE: Currently, this method is only supported for macOS, as the wasm hash generated will vary depending on operating system._
 
 To verify the CycleOps balance checker canister's black hole status from your local machine:
 

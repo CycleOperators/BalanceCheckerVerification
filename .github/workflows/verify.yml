@@ -11,4 +11,5 @@ jobs:
         with:
           dfx-version: 0.13.1
           install-moc: true
+          vessel-version: v0.6.5
       - run: npm ci && npm run setup && npm run verify

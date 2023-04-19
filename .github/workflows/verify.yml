@@ -7,7 +7,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: jorgenbuilder/setup-dfx@0.0.6
+      - uses: jorgenbuilder/setup-dfx@0.0.7
         with:
           dfx-version: 0.13.1
           install-moc: true

@@ -6,8 +6,8 @@ jobs:
   verify:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: aviate-labs/setup-dfx@v0.2.5
+      - uses: actions/checkout@v4
+      - uses: aviate-labs/setup-dfx@v0.3.2
         with:
           dfx-version: 0.13.1
           install-moc: true

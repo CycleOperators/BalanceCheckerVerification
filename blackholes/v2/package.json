@@ -5,7 +5,7 @@
   "scripts": {
     "verify-blackhole": "npm ci && npm run setup && npm run verify",
     "setup": "npx ts-node ./node/os && dfx stop && dfx start --clean --background && dfx deploy blackhole --argument '(principal \"qc4nb-ciaaa-aaaap-aawqa-cai\")' && npm run remove-controllers-local",
-    "remove-controllers-local": "dfx canister update-settings blackhole --remove-controller $(dfx identity get-wallet) && dfx canister update-settings blackhole --remove-controller $(dfx identity get-principal)",
+    "remove-controllers-local": "dfx canister update-settings blackhole --remove-controller $(dfx identity get-wallet) && echo \"yes\" | dfx canister update-settings blackhole --remove-controller $(dfx identity get-principal)",
     "declarations": "npx ts-node ./tasks/declarations",
     "pretty": "npx prettier --write \"**/*.ts(x)?\"",
     "verify": "npx ts-node ./node/verify"

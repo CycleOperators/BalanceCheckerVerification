@@ -7,10 +7,15 @@ jobs:
   verify:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: aviate-labs/setup-dfx@v0.2.5
+      - name: Install dfx
+        uses: dfinity/setup-dfx@main
         with:
           dfx-version: 0.13.1
-          install-moc: true
+      - name: Install vessel
+        uses: ByronBecker/setup-dfx@v0.1.0
+        with:
           vessel-version: 0.6.5
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 20
       - run: cd blackholes/v1 && npm run verify-blackhole 

@@ -1,0 +1,15 @@
+name: Verify Black Hole Canister V2
+on:
+  - push
+  - workflow_dispatch
+jobs:
+  verify:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aviate-labs/setup-dfx@v0.3.0
+        with:
+          dfx-version: 0.24.0
+          install-moc: true
+          vessel-version: 0.7.0
+      - run: cd blackholes/v2 && npm run verify-blackhole 

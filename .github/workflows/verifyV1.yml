@@ -1,4 +1,4 @@
-name: Verify Black Hole Canister
+name: Verify Black Hole Canister V1
 on:
   - push
   - workflow_dispatch
@@ -12,4 +12,4 @@ jobs:
           dfx-version: 0.13.1
           install-moc: true
           vessel-version: 0.6.5
-      - run: npm ci && npm run setup && npm run verify
+      - run: cd blackholes/v1 && npm ci && npm run setup && npm run verify

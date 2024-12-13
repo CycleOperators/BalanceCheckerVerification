@@ -15,8 +15,8 @@ This will only take a few clicks!
 
 1. Fork this repository.
 2. Navigate to the actions tab of your new repo.
-3. Select the "Verify Black Hole Canister" action on the left.
-4. Dispatch the action.
+3. Select the "Verify Black Hole Canister V1" action on the left.
+4. Click the "Run workflow" button to dispatch the action.
 
 You can view the output of this action to confirm that 1) the canister has no controllers, 2) the mainnet wasm matches the contents of this repository. The final step to be 100% confident that this canister can do no harm is to audit the source code of this repo.
 

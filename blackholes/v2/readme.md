@@ -1,7 +1,7 @@
 ## Introduction
 
-- This repository contains the [source code](blackhole.mo) for canister `5vdms-kaaaa-aaaap-aa3uq-cai`, the CycleOps balance checker canister
-- It contains scripts allowing a user to verify that canister `5vdms-kaaaa-aaaap-aa3uq-cai` is:
+- This repository contains the [source code](blackhole.mo) for canister `2daxo-giaaa-aaaap-anvca-cai`, version 2 (V2) of the the CycleOps balance checker canister
+- It contains scripts allowing a user to verify that canister `2daxo-giaaa-aaaap-anvca-cai` is:
   - blackholed, with 0 controllers
   - running the same wasm binary generated from ([./blackhole.mo](blackhole.mo))
 
@@ -27,15 +27,15 @@ _NOTE: Currently, this method is only supported for macOS, as the wasm hash gene
 To verify the CycleOps balance checker canister's black hole status from your local machine:
 
 1. Clone this repository
-2. Install version 0.24.0 of dfx via dfxvm `DFX_VERSION=0.20.0 sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"`. [dfx](https://internetcomputer.org/docs/current/references/cli-reference/dfx-parent/) is the DFINITY command-line execution environment for creating, deploying, and managing the dapps you develop for the IC.
-3. Install vessel from (https://github.com/dfinity/vessel). Vessel is used to fix the version of the [motoko-base](https://github.com/dfinity/motoko-base) library used in the project to 0.12.1.
+2. Install version 0.24.0 of dfx via dfxvm `DFX_VERSION=0.24.0 sh -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"`. [dfx](https://internetcomputer.org/docs/current/references/cli-reference/dfx-parent/) is the DFINITY command-line execution environment for creating, deploying, and managing the dapps you develop for the IC.
+3. Install vessel version 0.7.0 from (https://github.com/dfinity/vessel/releases/tag/v0.7.0). Vessel is used to fix the version of the [motoko-base](https://github.com/dfinity/motoko-base) library used in the project to 0.12.1.
 4. The following command:
 
-   a. Spins up a local dfx instance and deploys a copy of the CycleOps balance checker canister from the code in `blackhole.mo` in this repository.
+   a. Spins up a local dfx instance and deploys a copy of the CycleOps balance checker V2 canister from the code in `blackhole.mo` in this repository.
 
-   b. It then compares the wasm hash of that module against the hash of the wasm module stored in `5vdms-kaaaa-aaaap-aa3uq-cai`, the canister id of the CycleOps balance checker canister running on main net.
+   b. It then compares the wasm hash of that module against the hash of the wasm module stored in `2daxo-giaaa-aaaap-anvca-cai`, the canister id of the CycleOps balance checker V2 canister running on main net.
 
-   c. It also verifies that `5vdms-kaaaa-aaaap-aa3uq-cai` has no controllers.
+   c. It also verifies that `2daxo-giaaa-aaaap-anvca-cai` has no controllers.
 
    ```sh
    npm run verify-blackhole
@@ -65,9 +65,9 @@ This repository makes verification of this canister as easy as a few clicks. Her
 
 **Verification Setup & Local Deployment:** [`npm run setup`](package.json#L7) starts up a fresh local replica, then creates a local deployment of the canister directly from the code in [./blackhole.mo](./blackhole.mo) and removes its controllers.
 
-**Controller Verification:** Inside the [retrieveControllersAndModuleHash()](./node/verify.ts#L25) method, we call the `dfx canister info` command [./node/verify.ts#L30](./node/verify.ts#L30) with `5vdms-kaaaa-aaaap-aa3uq-cai` in order to read the controllers of that canister. We then verify that this canister has no controllers [./node/verify.ts#L52](./node/verify.ts#L52) on mainnet and verify that there are none ([`./node/verify.ts#L30`](./node/verify.ts#L30)).
+**Controller Verification:** Inside the [retrieveControllersAndModuleHash()](./node/verify.ts#L26) method, we call the `dfx canister info` command [./node/verify.ts#L31](./node/verify.ts#L31) with `2daxo-giaaa-aaaap-anvca-cai` in order to read the controllers of that canister. We then verify that this canister has no controllers [./node/verify.ts#L54](./node/verify.ts#L54) on mainnet.
 
-**Source Code Verification:** Next, we ensure that the code running on mainnet is indeed to code in this open source repository, by comparing the mainnet wasm hash against the wasm hash from a locally deployed version of the source code. The same `dfx canister info` call is executed within the [retrieveControllersAndModuleHash()](./node/verify.ts#L25) function on both the locally deployed version of the blackhole [./blackhole.mo](blackhole.mo) and the `5vdms-kaaaa-aaaap-aa3uq-cai` canister running on main net [./canister_ids.json](./canister_ids.json) in order to retrieve both wasm module hashes. Lastly, we verify that the hash of the canister deployed from source matches the balance checker canister on mainnet [./node/verify.ts#L59](./node/verify.ts#L59).
+**Source Code Verification:** Next, we ensure that the code running on mainnet matches the code running in this open source repository, by comparing the mainnet wasm hash against the wasm hash from a locally deployed version of the source code. The same `dfx canister info` call is executed within the [retrieveControllersAndModuleHash()](./node/verify.ts#L26) function on both the locally deployed version of the V2 blackhole [./blackhole.mo](blackhole.mo) and the `2daxo-giaaa-aaaap-anvca-cai` canister running on main net, with the mainnet canister id pulled from [./canister_ids.json](./canister_ids.json) in order to retrieve both wasm module hashes. Lastly, we verify that the hash of the canister deployed locally from source matches the hash of balance checker V2 canister on mainnet [./node/verify.ts#L61-68](./node/verify.ts#L61-68).
 
 **Source Code Audit:** The final step in gaining confidence in this canister is to audit the source code ([./blackhole.mo](blackhole.mo)).
 

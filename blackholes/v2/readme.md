@@ -41,7 +41,7 @@ To verify the CycleOps balance checker canister's black hole status from your lo
    npm run verify-blackhole
    ```
 
-5. You should see the following in the local logs:
+5. You should see a successful verification in the local logs:
 
    ![successful action logs](./assets/local-log.png)
 

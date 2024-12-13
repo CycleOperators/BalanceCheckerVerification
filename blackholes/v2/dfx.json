@@ -1,0 +1,22 @@
+{
+  "canisters": {
+    "blackhole": {
+      "gzip": true,
+      "main": "blackhole.mo",
+      "type": "motoko"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "-no-check-ir",
+      "packtool": "vessel sources"
+    }
+  },
+  "dfx": "0.24.0",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8089"
+    }
+  },
+  "version": 1
+}

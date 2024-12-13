@@ -4,6 +4,6 @@
     "esModuleInterop": true,
     "moduleResolution": "node"
   },
-  "include": ["./node"],
+  "include": ["node"],
   "exclude": []
 }

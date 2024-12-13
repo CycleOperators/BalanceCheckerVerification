@@ -1,0 +1,22 @@
+name: Verify Black Hole Canister V2
+on:
+  - push
+  - pull_request
+  - workflow_dispatch
+jobs:
+  verify:
+    runs-on: macos-13
+    # Unable to write to usr/local/share in latest versions of macOS (14, 15, latest, etc.)
+    # https://github.com/actions/runner-images/issues/9272
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dfx
+        uses: dfinity/setup-dfx@main
+        with:
+          dfx-version: 0.24.0
+
+      - name: Install vessel
+        uses: aviate-labs/setup-dfx@v0.3.2
+        with:
+          vessel-version: 0.7.0
+      - run: cd blackholes/v2 && npm run verify-blackhole 

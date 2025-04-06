@@ -92,18 +92,7 @@ jobs:
           echo "controllers_str=$controllers_str" >> $GITHUB_OUTPUT
           echo "module_hash=$MODULE_HASH" >> $GITHUB_OUTPUT
           echo "canister_id=$CANISTER_ID" >> $GITHUB_OUTPUT
-
-      - name: Ensure zero controllers
-        run: |
-          if [ -n "${{ steps.gather_info.outputs.controllers_str }}" ]; then
-            echo "✘ ERROR: Found controllers, but expected none."
-            echo "✘ Controllers: ${{ steps.gather_info.outputs.controllers_str }}"
-            exit 1
-          else
-            echo "✓ No controllers found for canister ${{ steps.gather_info.outputs.canister_id }}."
-            echo "View this at https://dashboard.internetcomputer.org/canister/${{ steps.gather_info.outputs.canister_id }}"
-          fi
-
+      
       - name: Compare hashes
         run: |
           DOCKER_HASH="${{ steps.build_wasm.outputs.docker_hash }}"
@@ -119,3 +108,14 @@ jobs:
             echo "✘ ERROR: Hash mismatch!"
             exit 1
           fi 
+
+      - name: Ensure zero controllers
+        run: |
+          if [ -n "${{ steps.gather_info.outputs.controllers_str }}" ]; then
+            echo "✘ ERROR: Found controllers, but expected none."
+            echo "✘ Controllers: ${{ steps.gather_info.outputs.controllers_str }}"
+            exit 1
+          else
+            echo "✓ No controllers found for canister ${{ steps.gather_info.outputs.canister_id }}."
+            echo "View this at https://dashboard.internetcomputer.org/canister/${{ steps.gather_info.outputs.canister_id }}"
+          fi

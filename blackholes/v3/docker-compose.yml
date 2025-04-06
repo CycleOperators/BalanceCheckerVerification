@@ -1,0 +1,27 @@
+x-base-image:
+  versions:
+    moc: &moc 0.14.3
+    ic-wasm: &ic_wasm 0.9.3
+    mops-cli: &mops-cli 0.2.0
+  name: &base_name "ghcr.io/research-ag/motoko-build:moc-0.14.3"
+
+services:
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+      args:
+        MOC_VERSION: *moc
+        IC_WASM_VERSION: *ic_wasm
+        MOPS_CLI_VERSION: *mops-cli
+    image: *base_name
+  wasm:
+    build:
+      context: .
+      args:
+        IMAGE: *base_name
+    volumes:
+      - ./out:/project/out
+    environment:
+      compress : no
+    command: bash --login build.sh

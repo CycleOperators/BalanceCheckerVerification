@@ -1,0 +1,21 @@
+{
+  "canisters": {
+    "blackhole": {
+      "main": "./src/blackhole.mo",
+      "type": "motoko"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "-no-check-ir",
+      "packtool": "mops sources"
+    }
+  },
+  "dfx": "0.26.0-beta.1",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8089"
+    }
+  },
+  "version": 1
+}

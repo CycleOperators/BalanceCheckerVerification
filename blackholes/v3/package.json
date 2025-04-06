@@ -1,14 +1,6 @@
 {
-  "scripts": {
-    "verify-blackhole": "npm ci && npm run setup && npm run verify",
-    "setup": "npx ts-node ./node/os && dfx stop && dfx start --clean --background && dfx deploy blackhole --argument '(principal \"qc4nb-ciaaa-aaaap-aawqa-cai\")'",
-    "verify": "npx ts-node ./node/verify"
-  },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.13.14",
-    "fs-extra": "^11.3.0",
-    "ic-mops": "^1.5.0",
     "ts-node": "^10.9.2"
   }
 }

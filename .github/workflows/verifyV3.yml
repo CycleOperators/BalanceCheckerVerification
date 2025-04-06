@@ -18,4 +18,4 @@ jobs:
         with:
           node-version: 20.17.0
 
-      - run: cd blackholes/v1 && npm run verify-blackhole 
+      - run: cd blackholes/v3 && npm run verify-blackhole 

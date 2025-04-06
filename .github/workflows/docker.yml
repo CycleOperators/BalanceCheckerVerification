@@ -1,0 +1,24 @@
+name: 🚀 Build and publish Docker image
+
+on:
+  push:
+    tags:
+      - 'moc-*'
+      - 'latest'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image
+        run: docker compose build base
+
+      - name: Push Docker image
+        run: docker compose push base

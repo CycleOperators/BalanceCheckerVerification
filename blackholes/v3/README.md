@@ -1,8 +1,8 @@
 ## Introduction
 
-- This repository contains the [source code](blackhole.mo) for canister `2daxo-giaaa-aaaap-anvca-cai`, version 2 (V2) of the the CycleOps balance checker canister
+- This repository contains the [source code](blackhole.mo) for canister `cpbhu-5iaaa-aaaad-aalta-cai`, version 3 (V3) of the the CycleOps balance checker canister
 - It uses the [Reproducible Build Template from research-ag](https://github.com/research-ag/motoko-build-template), allowing anyone to build this canister and verify its module hash locally.
-- You can also run the V3 GitHub action attached to this repository in order to verify that `2daxo-giaaa-aaaap-anvca-cai` is:
+- You can also run the V3 GitHub action attached to this repository in order to verify that `cpbhu-5iaaa-aaaad-aalta-cai` is:
   - blackholed, with 0 controllers
   - running the same wasm binary generated from ([./blackhole.mo](blackhole.mo))
 
@@ -23,4 +23,6 @@ You can view the output of this action to confirm that 1) the canister has no co
 
 ## Alternative: Verify on your local machine
 
-This repository uses the [Reproducible Build Motoko Template Standard from research-ag](https://github.com/research-ag/motoko-build-template). Follow the instructions there in order to spin up docker and build the [canister code](./src/blackhole.mo) with the correct version of dfx and the motoko compiler inside of a linux x86_64 environment.
+This repository uses the [Reproducible Build Motoko Template Standard from research-ag](https://github.com/research-ag/motoko-build-template). In this folder, follow the instructions listed there in order to spin up docker and build the [canister code](./src/blackhole.mo) with the correct version of dfx and the motoko compiler inside of a linux x86_64 environment.
+
+The resulting hash should match `dfcf37d4ee18bfe77a12197feaf4686f160d717383f0cf525f9d30e60fec204d`

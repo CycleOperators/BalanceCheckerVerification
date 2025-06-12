@@ -1,0 +1,121 @@
+name: Verify Black Hole Canister V3
+
+on:
+  - push
+  - pull_request
+  - workflow_dispatch
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    # This sets the default working directory for ALL run steps in this job
+    defaults:
+      run:
+        working-directory: blackholes/v3
+
+    steps:
+      # Checkout happens from the repo root (this is a "uses" step, so the default doesn't affect it)
+      - name: Check out repository
+        uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx (optional, but recommended)
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Build base image
+        run: |
+          docker compose build base
+
+      - name: Build wasm image
+        run: |
+          docker compose build wasm
+
+      - name: Run build script inside wasm container and extract hash
+        id: build_wasm
+        run: |
+          # Run docker compose and store the entire output in a variable
+          OUTPUT=$(docker compose run --rm wasm)
+
+          echo "===== Docker Compose Output ====="
+          echo "$OUTPUT"
+          echo "================================="
+
+          # 2) Look for the line with "out/out_Linux_x86_64.wasm" 
+          #    e.g. "79b15176dc613860f35867828f40e7d6...  out/out_Linux_x86_64.wasm"
+          HASH_LINE=$(echo "$OUTPUT" | grep 'out/out_Linux_x86_64.wasm' || true)
+
+          if [ -z "$HASH_LINE" ]; then
+            echo "No line with out/out_Linux_x86_64.wasm found!"
+            exit 1
+          fi
+
+          # 3) Extract the hash (first space-delimited token)
+          DOCKER_HASH=$(echo "$HASH_LINE" | awk '{print $1}')
+          echo "docker_hash=$DOCKER_HASH" >> $GITHUB_OUTPUT
+      - name: Print build hash
+        run: |
+          echo "Docker hash: ${{ steps.build_wasm.outputs.docker_hash }}"
+  
+      - name: Install dfx
+        uses: dfinity/setup-dfx@main
+        with:
+          dfx-version: 0.26.0-beta.1
+      
+      - name: Import the buildtest identity
+        run: |
+          dfx identity import buildtest ./build-test.pem --disable-encryption --quiet
+
+      - name: Gather canister info
+        id: gather_info
+        run: |
+          # 1) Set the environment variable to disable the plaintext warning
+          export DFX_WARNING=-mainnet_plaintext_identity
+
+          # 2) Query dfx for info
+          CANISTER_ID=$(dfx canister --ic id blackhole)
+          INFO=$(dfx canister --ic info blackhole)
+
+          echo "===== dfx canister --ic info blackhole ====="
+          echo "$INFO"
+          echo "========================================"
+
+          # 3) Extract the "Controllers:" line (may be empty if 0 controllers)
+          CONTROLLERS_LINE=$(echo "$INFO" | grep '^Controllers:' || true)
+          # Remove "Controllers:" prefix + any trailing spaces to get the controller principals
+          controllers_str=$(echo "$CONTROLLERS_LINE" | sed -E 's/^Controllers:\s*//')
+
+          # 4) Extract the "Module hash:" line, then parse out just the hex string
+          MODULE_HASH_LINE=$(echo "$INFO" | grep '^Module hash:' || true)
+          MODULE_HASH=$(echo "$MODULE_HASH_LINE" | sed -E 's/^Module hash:\s*0x([A-Za-z0-9]+)/\1/')
+
+          # 5) Expose these values as step outputs
+          echo "controllers_str=$controllers_str" >> $GITHUB_OUTPUT
+          echo "module_hash=$MODULE_HASH" >> $GITHUB_OUTPUT
+          echo "canister_id=$CANISTER_ID" >> $GITHUB_OUTPUT
+      
+      - name: Compare hashes
+        run: |
+          DOCKER_HASH="${{ steps.build_wasm.outputs.docker_hash }}"
+          MODULE_HASH="${{ steps.gather_info.outputs.module_hash }}"
+
+          echo "Docker hash:   $DOCKER_HASH"
+          echo "Canister hash: $MODULE_HASH"
+
+          if [ "$DOCKER_HASH" = "$MODULE_HASH" ]; then
+            echo "✓ SUCCESS: Hashes match for canister ${{ steps.gather_info.outputs.canister_id }}."
+            echo "View this at https://dashboard.internetcomputer.org/canister/${{ steps.gather_info.outputs.canister_id }}"
+          else
+            echo "✘ ERROR: Hash mismatch!"
+            exit 1
+          fi 
+
+      - name: Ensure zero controllers
+        run: |
+          if [ -n "${{ steps.gather_info.outputs.controllers_str }}" ]; then
+            echo "✘ ERROR: Found controllers, but expected none."
+            echo "✘ Controllers: ${{ steps.gather_info.outputs.controllers_str }}"
+            exit 1
+          else
+            echo "✓ No controllers found for canister ${{ steps.gather_info.outputs.canister_id }}."
+            echo "View this at https://dashboard.internetcomputer.org/canister/${{ steps.gather_info.outputs.canister_id }}"
+          fi

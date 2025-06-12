@@ -1,0 +1,74 @@
+type StatusChecker = 
+ service {
+   canisterStatus: (principal) -> (CanisterStatusResult);
+   /// checks the canister status of itself or anything it is the controller of
+   canisterStatuses: (vec principal, nat) -> (Result);
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: vec CanisterStatusResult;
+ };
+type QueryStats = 
+ record {
+   num_calls_total: nat;
+   num_instructions_total: nat;
+   request_payload_bytes_total: nat;
+   response_payload_bytes_total: nat;
+ };
+type MemoryMetrics = 
+ record {
+   canister_history_size: nat;
+   custom_sections_size: nat;
+   global_memory_size: nat;
+   snapshots_size: nat;
+   stable_memory_size: nat;
+   wasm_binary_size: nat;
+   wasm_chunk_store_size: nat;
+   wasm_memory_size: nat;
+ };
+type DefiniteCanisterSettings = 
+ record {
+   compute_allocation: nat;
+   controllers: vec principal;
+   freezing_threshold: nat;
+   log_visibility:
+    variant {
+      allowed_viewers: vec principal;
+      controllers;
+      public;
+    };
+   memory_allocation: nat;
+   reserved_cycles_limit: nat;
+   wasm_memory_limit: nat;
+ };
+type CanisterStatusResult = 
+ variant {
+   err: text;
+   ok: CanisterStatus;
+ };
+type CanisterStatus = 
+ record {
+   cycles: nat;
+   idle_cycles_burned_per_day: nat;
+   memory_metrics: MemoryMetrics;
+   memory_size: nat;
+   module_hash: opt blob;
+   query_stats: QueryStats;
+   reserved_cycles: nat;
+   settings: DefiniteCanisterSettings;
+   status: variant {
+             running;
+             stopped;
+             stopping;
+           };
+ };
+/// CycleOps Status Checker V3 Implementation
+/// The canister status checker actor responsible for monitoring the cycles balances of customer-owned canisters
+/// CycleOps spins up a blackholed version of this canister.
+/// 
+/// The caller is the original creator of this service. This cannot change throughout the lifecycle of the canister
+/// as it can only be created once. Any subsequent upgrades by other controllers cannot change this field.
+/// The access control implemented in this canister's public APIs means that the CycleOps Service is the only
+/// caller with the ability to invoke the public methods of this canister.
+service : (principal) -> StatusChecker
